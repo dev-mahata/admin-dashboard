@@ -54,7 +54,7 @@ function Sidebar({
   );
 
   const toggle = (itemId) => {
-    const newExpanded = new Set(expandedItems)
+    const newExpanded = new Set(expandedItems);
   };
   return (
     <div
