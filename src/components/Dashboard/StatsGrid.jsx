@@ -95,7 +95,8 @@ const stats = [
   },
 ];
 
-function StatsGrid() {
+// make statsGrid independent and create seperate data file 
+function StatsGrid({stats, index}) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
       {stats.map((stats, index) => {
