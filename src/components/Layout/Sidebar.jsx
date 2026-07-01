@@ -1,65 +1,75 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo/logo.png";
 import {
   BarChart3,
   ChevronDown,
   LayoutDashboard,
   Settings,
+  UserCog,
   Users,
 } from "lucide-react";
 
 const menuItems = [
   {
-    id: "dashboard",
+    path: "/",
     icon: LayoutDashboard,
     label: "Dashboard",
     active: true,
     badge: "New",
   },
   {
-    id: "analytics",
+    path: "/analytics",
     icon: BarChart3,
     label: "Analytics",
     submenu: [
-      { id: "overview", label: "Overview" },
-      { id: "reports", label: "Reports" },
-      { id: "insights", label: "Insights" },
+      { path: "/analytics/overview", label: "Overview" },
+      { path: "/analytics/reports", label: "Reports" },
+      { path: "/analytics/insights", label: "Insights" },
     ],
   },
   {
-    id: "users",
+    path: "/users",
     icon: Users,
     label: "Users",
     count: "2.4k",
     submenu: [
-      { id: "all-users", label: "All Users" },
-      { id: "roles", label: "User Activity" },
+      { path: "/users/all-users", label: "All Users" },
+      { path: "/users/roles", label: "User Activity" },
+      {
+        path: "/users/create-employee",
+        label: "Create Employee",
+      },
     ],
   },
   {
-    id: "settings",
+    path: "/admin-manager",
+    icon: UserCog,
+    label: "Admin Manager",
+    submenu: [
+      { path: "/admin-manager/employees", label: "Employees" },
+      { path: "/admin-manager/activity-log", label: "Activity Log" },
+    ],
+  },
+  {
+    path: "/settings",
     icon: Settings,
     label: "Settings",
   },
 ];
 
-function Sidebar({
-  collapsed,
-  onToggle,
-  currentPage,
-  onPageChange,
-}) {
+function Sidebar({ collapsed, onToggle }) {
   const [expandedItems, setExpandedItems] = useState(
-    new Set(["analytics"]),
+    new Set(["/analytics"]),
   );
 
-  const toggleExpanded = (itemId) => {
+  const toggleExpanded = (path) => {
     const newExpanded = new Set(expandedItems);
 
-    if (newExpanded.has(itemId)) {
-      newExpanded.delete(itemId);
+    if (newExpanded.has(path)) {
+      newExpanded.delete(path);
     } else {
-      newExpanded.add(itemId);
+      newExpanded.add(path);
     }
 
     setExpandedItems(newExpanded);
@@ -70,10 +80,16 @@ function Sidebar({
       dark:bg-slate-900/80 backdrop-blur-xl border-r border-slate-200/50 
       dark:border-slate-700/50 flex flex-col relative z-10`}
     >
-      <div className={`${collapsed ? "p-6" : "p-6"} border-b border-slate-200/50 dark:border-slate-700/50`}>
+      <div
+        className={`${collapsed ? "p-6" : "p-6"} border-b border-slate-200/50 dark:border-slate-700/50`}
+      >
         <div className="flex items-center space-x-3">
           <div className="">
-            <img src={logo} className={`${collapsed ? "h-8 w-8" : "h-10 w-10"} `} alt="" />
+            <img
+              src={logo}
+              className={`${collapsed ? "h-8 w-8" : "h-10 w-10"} `}
+              alt=""
+            />
           </div>
 
           {!collapsed && (
@@ -93,66 +109,72 @@ function Sidebar({
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         {menuItems.map((item) => {
           return (
-            <div key={item.id}>
-              <button
-                className={`w-full flex items-center justify-between p-3 rounded-xl
+            <div key={item.path}>
+              <div className="relative">
+                <NavLink
+                  to={item.path}
+                  className={({
+                    isActive,
+                  }) => `w-full flex items-center justify-between p-3 rounded-xl
               transition-all duration-200 ${
-                currentPage === item.id || item.active
+                isActive
                   ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25"
                   : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50"
               }`}
-                onClick={() => {
-                  if (item.submenu) {
-                    toggleExpanded(item.id);
-                  } else {
-                    onPageChange(item.id);
-                  }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <item.icon className={`w-5 h-5`} />
-                  {/* Conditional Rendering */}
-                  <>
-                    {!collapsed && (
-                      <span className="font-medium ml-2">
-                        {item.label}
-                      </span>
-                    )}
-                    {!collapsed && item.badge && (
-                      <span className="px-2 py-1 text-xs bg-red-500 text-white rounded-full">
-                        {item.badge}
-                      </span>
-                    )}
-                    {!collapsed && item.count && (
-                      <span className="px-2 py-1 text-xs bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full">
-                        {item.count}
-                      </span>
-                    )}
-                  </>
-                </div>
+                >
+                  <div className="flex items-center space-x-3">
+                    <item.icon className={`w-5 h-5`} />
+                    {/* Conditional Rendering */}
+                    <>
+                      {!collapsed && (
+                        <span className="font-medium ml-2">
+                          {item.label}
+                        </span>
+                      )}
+                      {!collapsed && item.badge && (
+                        <span className="px-2 py-1 text-xs bg-red-500 text-white rounded-full">
+                          {item.badge}
+                        </span>
+                      )}
+                      {!collapsed && item.count && (
+                        <span className="px-2 py-1 text-xs bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full">
+                          {item.count}
+                        </span>
+                      )}
+                    </>
+                  </div>
+                </NavLink>
 
                 {!collapsed && item.submenu && (
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform`}
-                  />
+                  <button
+                    onClick={() =>
+                      toggleExpanded(item.path)
+                    }
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${expandedItems.has(item.path) ? "rotate-180" : ""}`}
+                    />
+                  </button>
                 )}
-              </button>
+              </div>
 
               {/* Sub Menus  */}
               {!collapsed &&
                 item.submenu &&
-                expandedItems.has(item.id) && (
+                expandedItems.has(item.path) && (
                   <div className="ml-8 mt-2 space-y-1">
                     {item.submenu.map((subitem) => {
                       return (
-                        <button
-                          key={subitem.id}
-                          className="w-full text-left p-2 text-sm text-slate-600 dark:text-slate-400 
+                        <NavLink
+                          to={subitem.path}
+                          key={subitem.path}
+                          className="w-full flex text-left p-2 text-sm text-slate-600 dark:text-slate-400 
                           hover:text-slate-800 dark:hover:text-slate-100 hover:bg-slate-100 
                           dark:hover:bg-slate-800/50 rounded-lg transition-all"
                         >
                           {subitem.label}
-                        </button>
+                        </NavLink>
                       );
                     })}
                   </div>
@@ -163,7 +185,7 @@ function Sidebar({
       </nav>
 
       {/* User Profile */}
-      {!collapsed && (
+      {/* {!collapsed && (
         <div className="p-4 border-t border-slate-200/50 dark:border-slate-700/50">
           <div
             className="flex items-center space-x-3 p-3 rounded-xl bg-slate-50
@@ -188,7 +210,7 @@ function Sidebar({
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

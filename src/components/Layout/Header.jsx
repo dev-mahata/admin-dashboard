@@ -7,12 +7,13 @@ import {
   Search,
   Settings,
   Sun,
+  Moon,
 } from "lucide-react";
 import React from "react";
 import { useTheme } from "../../context/ThemeContext";
 
 function Header({ sideBarCollapsed, onToggleSidebar }) {
-  const {theme, toggleTheme} = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div
@@ -34,15 +35,15 @@ function Header({ sideBarCollapsed, onToggleSidebar }) {
             <h1 className="text-2xl font-black text-slate-800 dark:text-white">
               Dashboard
             </h1>
-            <p>
+            {/* <p>
               Welcome back, Debnath! here's What's happening
               today
-            </p>
+            </p> */}
           </div>
         </div>
 
         {/* center */}
-        <div className="flex-1 max-w-md mx-8">
+        {/* <div className="flex-1 max-w-md mx-8">
           <div className="relative">
             <Search
               className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2
@@ -64,32 +65,36 @@ function Header({ sideBarCollapsed, onToggleSidebar }) {
               <Filter />
             </button>
           </div>
-        </div>
+        </div> */}
 
         {/* Right */}
         <div className="flex items-center space-x-3">
           {/* Quick Action */}
-          <button
+          {/* <button
             className="hidden lg:flex items-center space-x-2 py-2 px-4 bg-gradient-to-r
           from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all"
           >
             <Plus className="w-4 h-4" />
             <span className="text-sm font-medium">New</span>
-          </button>
+          </button> */}
 
           {/* Toggle */}
           <button
             className="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 
-          hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          onClick={toggleTheme}
+          hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            onClick={toggleTheme}
           >
-            <Sun className="w-5 h-5" />
+            {theme === "light" ? (
+              <Moon className="w-5 h-5" />
+            ) : (
+              <Sun className="w-5 h-5" />
+            )}
           </button>
 
           {/* Notification */}
           <button
             className="relative p-2.5 rounded-xl text-slate-600 dark:text-slate-300
-          hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <Bell className="w-5 h-5 " />
             <span
@@ -103,7 +108,7 @@ function Header({ sideBarCollapsed, onToggleSidebar }) {
           {/* Setting */}
           <button
             className="relative p-2.5 rounded-xl text-slate-600 dark:text-slate-300
-          hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <Settings className="w-5 h-5" />
           </button>
@@ -120,7 +125,7 @@ function Header({ sideBarCollapsed, onToggleSidebar }) {
               alt="User"
               className="w-8 h-8 rounded-full  ring-2 ring-blue-500"
             />
-            <div className="hidden md:block">
+            <div className="hidden md:block cursor-pointer">
               <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
                 Debnath Mahata
               </p>
